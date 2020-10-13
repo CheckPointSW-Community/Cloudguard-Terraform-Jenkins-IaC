@@ -27,17 +27,22 @@ Per Terraform documentation, Modules in Terraform are self-contained packages of
 ## Modules directory should have 3 files per Terraform best practices as follow: Note that all Terraform configuration files are named with the .tf file extension.
 
 main.tf: configuration of all resource objects to be provisioned in the cloud provider to create the infrastructure.
+
 output.tf: value of results of the calling module that can used in other modules using <module.module_name.output_name>
+
 variables.tf: values of input variables used by modules using var.variable_name that will define your infrastructure
 
 There are 3 Check Point CloudGuard modules and let's explore them:
 
 amis: This module defines all the Check Point amis to used in Cloudguard security GWs and management server per region,
+
 instance_type: This module allow to chose the type of amazon instance type (t2,c5, m5 etc..) and size (micro, large, xlarge..) to be used for the CloudGuard cloud security gateway.
+
 autoscale: This module defines all the configuration blocks of all the objects to be provisioned such as the cloudguard VMs. the autoscaling group, security groups, launch policies, load balancer etc.. using following structure:
+
 You can refer to the Terraform documentation for more information on resources, arguments and attributes. https://www.terraform.io/docs/index.html
 
-### calling upon the amis module//
+// calling upon the amis module//
 
 module "amis" {
 	  source = "../amis"	
@@ -45,11 +50,11 @@ module "amis" {
 	  version_license = var.version_license
 	}
 
-### The resource type is autoscaling group in aws and the user given name in this terraform template is "asg"//
+// The resource type is autoscaling group in aws and the user given name in this terraform template is "asg"//
   
   resource "aws_autoscaling_group" "asg" {
 
-### the actual of the autoscaling group when deployed in aws as asg_name and defined in the local definition
+// the actual of the autoscaling group when deployed in aws as asg_name and defined in the local definition
 
  name_prefix = local.asg_name
 
@@ -132,8 +137,11 @@ Outbound Load Balancer Configuration (optional)
 	  proxy_elb_port = var.proxy_elb_port
 
 }
+
 Remote State
-With Terraform, immutability is possible via a state file which allows it to track and compare the configuration with the actual of state of the resources provisioned in aws. This state file is located by default in the local root directory. However when using a CICD pipeline, it is important to configure a remote state backend so that the state file can be accessed from multiple environment. Terraform supports multiple backends and we will use S3 for this tutorial
+
+With Terraform, immutability is possible via a state file which allows it to track and compare the configuration with the actual of state of the resources provisioned in aws. This state file is located by default in the local root directory. 
+However when using a CICD pipeline, it is important to configure a remote state backend so that the state file can be accessed from multiple environment. Terraform supports multiple backends and we will use S3 for this tutorial
 
 Create and use a S3 bucket to store the state file:
 
@@ -151,7 +159,6 @@ terraform {
  	}
 In order to ensure the lock state to prevent multiple users doing configuration changes simultaneously, we will have to create a dynamoDB database with a LockID keyword..This only required when using S3 as backend.
 
-No alt text provided for this image
 
 We are now ready to configure Jenkins for the continuous Integration and Deployment:
 Lets setup a Jenkins server for the configuration of the CICD pipeline and I will be installing it on an ubuntu Linux VM on my local machine using VBox and Vagrant...Jenkins requires to have Java installed as prerequisite. You can find the vagrant file on the tutorial GitHub repository.
