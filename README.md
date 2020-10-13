@@ -212,7 +212,7 @@ Jul 15 08:53:48 minion-1 jenkins[14590]: Correct java version found
 
 Please open your browser to the IP address of your VM at port 8080. Jenkins listens by default to port 8080 and it can be changed by replacing the value of <HTTP_PORT= > at /etc/default/jenkins. You can find your IP address using ifconfig. IF you are not using a VM then it would be localhost or 127.0.0.1. You will see the page below and please unlock Jenkins with the password below:
 
-# cat /var/lib/jenkins/secrets/initialAdminPassword
+> cat /var/lib/jenkins/secrets/initialAdminPassword
 
 <your_password>
 
